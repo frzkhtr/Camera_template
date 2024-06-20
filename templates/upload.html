@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Upload Image</title>
+</head>
+<body>
+  <div>
+    <h1>Upload Image</h1>
+    <!-- Form for uploading an existing image file -->
+    <form method="post" enctype="multipart/form-data" action="/upload">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+    
+    <h2>Or use your camera to take a photo</h2>
+    <div>
+      <video id="video" width="640" height="480" autoplay></video>
+      <button id="snap">Snap Photo</button>
+      <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    </div>
+    <form id="camera-form" method="post" enctype="multipart/form-data" action="/upload_camera">
+      <input type="hidden" name="image" id="image">
+      <input type="submit" value="Upload Photo">
+    </form>
+  </div>
+  
+  <script>
+    // Get access to the camera
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        var video = document.getElementById('video');
+        video.srcObject = stream;
+        video.play();
+      });
+    }
+    
+    // Trigger photo take
+    document.getElementById("snap").addEventListener("click", function() {
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var video = document.getElementById('video');
+      context.drawImage(video, 0, 0, 640, 480);
+      var dataURL = canvas.toDataURL('image/png');
+      document.getElementById('image').value = dataURL;
+    });
+  </script>
+</body>
+</html>
