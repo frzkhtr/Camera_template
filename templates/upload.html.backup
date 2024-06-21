@@ -33,11 +33,7 @@
         var video = document.getElementById('video');
         video.srcObject = stream;
         video.play();
-      }).catch(function(error) {
-        console.error("Error accessing camera: ", error);
       });
-    } else {
-      alert("getUserMedia not supported on your browser!");
     }
     
     // Trigger photo take
